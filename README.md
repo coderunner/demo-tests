@@ -1,27 +1,109 @@
-# Tests
+# Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.2.
+Dans le répertoire frontend, utiliser
 
-## Development server
+```
+ng test
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+pour exécuter les tests.
 
-## Code scaffolding
+Pour rouler le frontend
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+ng serve
+```
 
-## Build
+# Backend
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Vous devez installer le firebase cli.
 
-## Running unit tests
+```
+npm install -g firebase-tools
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Puis dans le répertoire backend
 
-## Running end-to-end tests
+```
+firebase init
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Pour installer
 
-## Further help
+- firestore
+- emulator (firestore)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Ensuite, copier votre clé firebase dans le fichier firebase-key.json à la racine du répertoire backend.
+
+Ajuster l'id de votre projet firebase dans firebase.properties.
+Assurez-vous que le port de l'émulateur est 8181 (firebase.json).
+
+Vous pouvez rouler l'émulator avec
+
+Pour exécuter les tests
+
+```
+firebase emulators:exec "./mvnw integration-test"
+```
+
+Pour rouler le backend
+
+```
+./mvnw clean spring-boot:run
+```
+
+Pour rouler les tests en debug avec Visual Studio Code, vous pouvez rouler l'émulateur avec
+
+```
+firebase emulators:start
+```
+
+Vous devez configurer Visual Studio Code (chercher java.test.config dans les settings) pour qu'il ajoute dans les variables d'environnement:
+
+```
+FIRESTORE_EMULATOR_HOST = localhost:8181
+```
+
+Celà devrait ressembler au json suivant dans votre settings.json.
+
+```
+{
+  ...
+  "java.test.config": {
+    "env": {
+      "FIRESTORE_EMULATOR_HOST": "localhost:8181"
+    }
+  }
+  ...
+}
+
+```
+
+# Cypress
+
+Terminal #1
+
+```
+firebase emulators:start
+```
+
+Terminal #2
+
+```
+export FIRESTORE_EMULATOR_HOST=localhost:8181
+./mvnw clean spring-boot:run
+
+```
+
+Terminal #3
+
+```
+ng serve
+```
+
+Terminal #4
+
+```
+ng run tests:cypress-open
+
+```

@@ -1,0 +1,9 @@
+<div>
+  <div *ngFor="let b of books; let last = last">
+    <p data-testid="title">Titre: {{ b.title }}</p>
+    <p>Auteur: {{ b.author }}</p>
+    <p>Description: {{ b.description }}</p>
+    <p>Nombre de pages : {{ b.nbPages }}</p>
+    <div *ngIf="!last"><hr /></div>
+  </div>
+</div>
