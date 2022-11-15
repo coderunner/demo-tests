@@ -1,5 +1,6 @@
 package com.inf5190.library;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -32,15 +33,18 @@ public class LibraryApplication {
 	@Bean
 	Firestore getFirestore() throws IOException {
 		if (FirebaseApp.getApps().size() == 0) {
-			FileInputStream serviceAccount = new FileInputStream("firebase-key.json");
 
-			FirebaseOptions options = FirebaseOptions.builder()
-					.setProjectId(this.firebaseProjectId)
-					.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-					.build();
+			final FirebaseOptions.Builder optionsBuilder = FirebaseOptions.builder()
+					.setProjectId(this.firebaseProjectId);
+
+			File f = new File("firebase-key.json");
+			if (f.exists()) {
+				FileInputStream serviceAccount = new FileInputStream("firebase-key.json");
+				optionsBuilder.setCredentials(GoogleCredentials.fromStream(serviceAccount));
+			}
 
 			LOGGER.info("Initializing Firebase application.");
-			FirebaseApp.initializeApp(options);
+			FirebaseApp.initializeApp(optionsBuilder.build());
 
 		} else {
 			LOGGER.info("Firebase application already initialized.");

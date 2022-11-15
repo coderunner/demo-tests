@@ -1,11 +1,23 @@
 stages:
   - test
 
-test-job:       
+test-ng-job:
   stage: test
+  image: node:16.14.2-bullseye
+  before_script:
+    - apt-get update
+    - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - apt install -y ./google-chrome*.deb;
+    - export CHROME_BIN=/usr/bin/google-chrome
   script:
-    - cd ../frontend
-    - npm install
-    - ng test
-    - cd ../../backend
+    - cd frontend
+    - export CHROME_BIN='/usr/bin/chromium'
+    - npm ci
+    - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+test-spring-job:
+  stage: test
+  image: openjdk:17
+  script:
+    - cd backend
     - ./mvnw clean verify
