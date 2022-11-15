@@ -1,0 +1,11 @@
+stages:
+  - test
+
+test-job:       
+  stage: test
+  script:
+    - cd ../frontend
+    - npm install
+    - ng test
+    - cd ../../backend
+    - ./mvnw clean verify
