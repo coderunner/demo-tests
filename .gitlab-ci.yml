@@ -1,11 +1,21 @@
+image: felixtrepanier/inf5190-ci:node-16-chromium-jdk17
+
 stages:
   - test
 
-test-job:       
+test-ng-job:
   stage: test
   script:
-    - cd ../frontend
-    - npm install
-    - ng test
-    - cd ../../backend
-    - ./mvnw clean verify
+    - cd frontend
+    - npm ci
+    - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+test-spring-job:
+  stage: test
+  before_script:
+    - npm i -g firebase-tools
+  script:
+    - cd backend
+    - echo $FIREBASE_KEY > firebase-key.json
+    - firebase setup:emulators:firestore
+    - firebase emulators:exec "./mvnw clean verify" --token $FIREBASE_TOKEN
