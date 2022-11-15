@@ -107,3 +107,26 @@ Terminal #4
 ng run tests:cypress-open
 
 ```
+
+#Docker
+
+Il faut istaller Docker: https://docs.docker.com/get-docker/
+
+Construire le projet pour obtenir un jar.
+
+```
+./mvnw package
+```
+
+Construire l'image avec le tag inf5190/tests
+
+```
+docker build -t inf5190/tests .
+```
+
+Exécuter le conteneur
+
+```
+docker run -p 8080:8080 inf5190/tests
+
+```
