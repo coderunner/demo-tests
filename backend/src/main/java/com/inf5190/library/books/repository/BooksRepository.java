@@ -17,15 +17,14 @@ import com.inf5190.library.books.model.Book;
 
 @Repository
 public class BooksRepository {
-    // Pour illustrer un leak
-    private List<Book> leak = new ArrayList<>();
+    private List<Book> cache = new ArrayList<>();
     private Firestore firestore;
 
     public BooksRepository(Firestore firestore) {
         this.firestore = firestore;
     }
 
-    // Ajout du mot clé synchronised pour illustrer
+    // Ajout du mot clé synchronized pour illustrer la contention
     synchronized public List<Book> getBooks(Integer requestedLimit, Order order)
             throws InterruptedException, ExecutionException {
 
@@ -38,8 +37,8 @@ public class BooksRepository {
             FirestoreBook book = d.toObject(FirestoreBook.class);
             return new Book(d.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getNbPages());
         }).toList();
+        cacheResults(books);
 
-        this.leak.addAll(books);
         return books;
     }
 
@@ -49,6 +48,11 @@ public class BooksRepository {
 
         DocumentReference doc = future.get();
         return new Book(doc.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getNbPages());
+    }
+
+    private void cacheResults(List<Book> books) {
+        // pour illustrer un leak
+        this.cache.addAll(books);
     }
 
 }
