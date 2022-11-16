@@ -3,10 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ViewPageComponent } from './view-page.component';
 import { BookService } from 'src/app/services/book.service';
 import { TestHelper } from 'src/app/tests/test-helper';
+import { DisplayBooksComponent } from 'src/app/components/display-books/display-books.component';
 
 // Nom de la série de test.
 describe('ViewPageComponent', () => {
-  let component: ViewPageComponent;
   let fixture: ComponentFixture<ViewPageComponent>;
   let testHelper: TestHelper<ViewPageComponent>;
 
@@ -22,14 +22,13 @@ describe('ViewPageComponent', () => {
   beforeEach(async () => {
     // Toujours valider les imports et les providers.
     await TestBed.configureTestingModule({
-      declarations: [ViewPageComponent],
+      declarations: [ViewPageComponent, DisplayBooksComponent],
       imports: [],
       // On défini un provider pour le test pour qu'Angular nous donne notre stub et non le vrai service.
       providers: [{ provide: BookService, useValue: bookServiceMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ViewPageComponent);
-    component = fixture.componentInstance;
     testHelper = new TestHelper(fixture);
     fixture.detectChanges();
   });
