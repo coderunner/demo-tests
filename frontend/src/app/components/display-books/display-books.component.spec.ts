@@ -48,10 +48,10 @@ describe('DisplayBooksComponent', () => {
     fixture.detectChanges();
 
     // On valide l'affichage
-    const title = testHelper.getElements('title');
-    expect(title).toBeDefined();
-    expect(title.length).toBe(2);
-    expect(title[0].innerText).toEqual('Titre: title');
-    expect(title[1].innerText).toEqual('Titre: title2');
+    const titles = testHelper.getElements('title');
+    expect(titles).toBeDefined();
+    expect(titles.length).toBe(2);
+    expect(titles[0].innerText).toEqual('Titre: title');
+    expect(titles[1].innerText).toEqual('Titre: title2');
   });
 });

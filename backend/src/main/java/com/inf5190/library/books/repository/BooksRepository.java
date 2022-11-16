@@ -1,5 +1,6 @@
 package com.inf5190.library.books.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -16,13 +17,18 @@ import com.inf5190.library.books.model.Book;
 
 @Repository
 public class BooksRepository {
+    // Pour illustrer un leak
+    private List<Book> leak = new ArrayList<>();
     private Firestore firestore;
 
     public BooksRepository(Firestore firestore) {
         this.firestore = firestore;
     }
 
-    public List<Book> getBooks(Integer requestedLimit, Order order) throws InterruptedException, ExecutionException {
+    // Ajout du mot clé synchronised pour illustrer
+    synchronized public List<Book> getBooks(Integer requestedLimit, Order order)
+            throws InterruptedException, ExecutionException {
+
         final Query query = this.firestore.collection("books");
         final Integer limit = requestedLimit != null ? requestedLimit : 20;
         final Direction direction = order == Order.asc ? Direction.ASCENDING : Direction.DESCENDING;
@@ -33,6 +39,7 @@ public class BooksRepository {
             return new Book(d.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getNbPages());
         }).toList();
 
+        this.leak.addAll(books);
         return books;
     }
 

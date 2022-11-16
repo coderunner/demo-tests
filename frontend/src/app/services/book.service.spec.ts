@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http/testing';
 import { BookService } from './book.service';
 
-describe('BooksService', () => {
+describe('BookService', () => {
   let service: BookService;
   let httpTestingController: HttpTestingController;
 
@@ -18,7 +18,7 @@ describe('BooksService', () => {
     service = TestBed.inject(BookService);
   });
 
-  it('should call get on the backend api', () => {
+  it('should call get on the backend api', async () => {
     const book = {
       id: '12233',
       title: 'title',
@@ -28,10 +28,7 @@ describe('BooksService', () => {
     };
 
     // On exécute la requête au service
-    service.get(1, 'asc').then((r) => {
-      // Ce code sera exécuté lorsque la réponse sera reçue.
-      expect(r).toEqual([book]);
-    });
+    const getPromise = service.get(1, 'asc');
 
     // On valide que l'appel HTTP est fait correctement
     const req = httpTestingController.expectOne(
@@ -42,9 +39,12 @@ describe('BooksService', () => {
 
     // On envoie la réponse.
     req.flush([book]);
+
+    const response = await getPromise;
+    expect(response).toEqual([book]);
   });
 
-  it('should call post on the backend api when adding a book', () => {
+  it('should call post on the backend api when adding a book', (done) => {
     const book = {
       id: null,
       title: 'title',
@@ -55,6 +55,7 @@ describe('BooksService', () => {
 
     service.add(book).then((r) => {
       expect(r).toEqual({ ...book, id: 'id' });
+      done();
     });
 
     const req = httpTestingController.expectOne('http://127.0.0.1:8080/books');
