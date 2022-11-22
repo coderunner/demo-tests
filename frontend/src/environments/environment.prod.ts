@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  backendUrl: 'https://book-app-nlwdtaal7a-nn.a.run.app',
 };

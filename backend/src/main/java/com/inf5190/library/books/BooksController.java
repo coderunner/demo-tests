@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inf5190.library.books.model.Book;
 import com.inf5190.library.books.repository.BooksRepository;
 
+import io.micrometer.core.annotation.Timed;
+
 @RestController
 public class BooksController {
 
@@ -21,6 +23,7 @@ public class BooksController {
         this.booksRepository = booksRepository;
     }
 
+    @Timed("com.inf5190.library.books.BooksController.get")
     @GetMapping("/books")
     public List<Book> get(
             @RequestParam(name = "limit", defaultValue = "20") Integer limit,
@@ -29,6 +32,7 @@ public class BooksController {
         return this.booksRepository.getBooks(limit, order);
     }
 
+    @Timed("com.inf5190.library.books.BooksController.add")
     @PostMapping("/books")
     public Book add(@RequestBody Book book) throws InterruptedException, ExecutionException {
         return this.booksRepository.addBook(book);
