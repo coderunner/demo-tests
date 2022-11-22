@@ -3,6 +3,7 @@ package com.inf5190.library;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +35,11 @@ public class LibraryApplication {
 	Firestore getFirestore() throws IOException {
 		if (FirebaseApp.getApps().size() == 0) {
 
+			String projectId = Optional.ofNullable(System.getenv("GOOGLE_CLOUD_PROJECT"))
+					.orElse(this.firebaseProjectId);
+
 			final FirebaseOptions.Builder optionsBuilder = FirebaseOptions.builder()
-					.setProjectId(this.firebaseProjectId);
+					.setProjectId(projectId);
 
 			File f = new File("firebase-key.json");
 			if (f.exists()) {
