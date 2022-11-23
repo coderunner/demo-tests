@@ -121,12 +121,42 @@ Construire le projet pour obtenir un jar.
 Construire l'image avec le tag inf5190/tests
 
 ```
-docker build -t inf5190/tests .
+docker build -t inf5190/app-books:latest .
 ```
 
 Exécuter le conteneur
 
 ```
-docker run -p 8080:8080 inf5190/tests
+docker run -dp 8080:8080 inf5190/app-books:latest
+docker ps
+docker stop ID
+docker start ID
+docker container ls -a
 
 ```
+
+# Déploiement
+
+## Angular
+
+Construire la version production (avec environment.prod.ts)
+
+```
+ng build
+```
+
+```
+firebase deploy --only hosting
+```
+
+## Spring Boot
+
+Avec le jib plugin:
+
+```
+./mvnw compile jib:build
+```
+
+Voir le Artifact Registry.
+Voir Cloud Run (variable d'environnement)
+Voir Logging
