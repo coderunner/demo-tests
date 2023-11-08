@@ -38,7 +38,7 @@ public class BooksRepository {
             FirestoreBook book = d.toObject(FirestoreBook.class);
             return new Book(d.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getNbPages());
         }).toList();
-        // cacheResults(books);
+        cacheResults(books);
 
         return books;
     }

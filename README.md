@@ -130,6 +130,34 @@ ng run tests:cypress-open
 
 ```
 
+# Visual VM and wrk
+
+1. Démarrer Visual VM
+2. Démarrer l'émulateur firestore
+   firebase emulators:start
+3. Démarrer le backend
+   export FIRESTORE_EMULATOR_HOST=localhost:8181
+   ./mvnw clean spring-boot:run
+4. Ajouter un livre avec POSTMAN
+5. Connecter Visual VM
+6. Utiliser wrk
+
+Ex: wrk -t12 -c400 -d30s http://127.0.0.1:8080/books?limit=20
+
+## Goulot d'étranglement
+
+1. Montrer les stats
+2. Montrer un threaddump
+3. Éliminer le goulot
+4. Montrer les stats
+
+## Fuite de mémoire
+
+1. Petit réchauffement
+2. wrk + GC x 2
+3. Voir la tendance de la heap
+4. Heap dump
+
 # Docker
 
 Il faut istaller Docker: https://docs.docker.com/get-docker/
