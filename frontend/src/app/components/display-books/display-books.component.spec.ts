@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestHelper } from 'src/app/tests/test-helper';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { TestHelper } from "src/app/tests/test-helper";
 
-import { DisplayBooksComponent } from './display-books.component';
+import { DisplayBooksComponent } from "./display-books.component";
 
-describe('DisplayBooksComponent', () => {
+describe("DisplayBooksComponent", () => {
   let component: DisplayBooksComponent;
   let fixture: ComponentFixture<DisplayBooksComponent>;
   let testHelper: TestHelper<DisplayBooksComponent>;
@@ -19,27 +19,27 @@ describe('DisplayBooksComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should not display books if empty', () => {
+  it("should not display books if empty", () => {
     fixture.detectChanges();
-    const title = testHelper.getElement('title');
+    const title = testHelper.getElement("title");
     expect(title).toBeUndefined();
   });
 
-  it('should display books', () => {
+  it("should display books", () => {
     // On assigne une valeur au Input du composant.
     component.books = [
       {
-        id: '123',
-        title: 'title',
-        author: 'author',
-        description: 'desc',
+        id: "123",
+        title: "title",
+        author: "author",
+        description: "desc",
         nbPages: 12,
       },
       {
-        id: '1232',
-        title: 'title2',
-        author: 'author2',
-        description: 'desc2',
+        id: "1232",
+        title: "title2",
+        author: "author2",
+        description: "desc2",
         nbPages: 122,
       },
     ];
@@ -48,10 +48,10 @@ describe('DisplayBooksComponent', () => {
     fixture.detectChanges();
 
     // On valide l'affichage
-    const titles = testHelper.getElements('title');
+    const titles = testHelper.getElements("title");
     expect(titles).toBeDefined();
     expect(titles.length).toBe(2);
-    expect(titles[0].innerText).toEqual('Titre: title');
-    expect(titles[1].innerText).toEqual('Titre: title2');
+    expect(titles[0].innerText).toEqual("Titre: title");
+    expect(titles[1].innerText).toEqual("Titre: title2");
   });
 });

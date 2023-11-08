@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Book } from '../../model/book';
-import { BookService } from '../../services/book.service';
+import { Component, OnInit } from "@angular/core";
+import { Book } from "../../model/book";
+import { BookService } from "../../services/book.service";
 
 @Component({
-  selector: 'app-view-page',
-  templateUrl: './view-page.component.html',
-  styleUrls: ['./view-page.component.css'],
+  selector: "app-view-page",
+  templateUrl: "./view-page.component.html",
+  styleUrls: ["./view-page.component.css"],
 })
 export class ViewPageComponent implements OnInit {
   limit = 1;
-  order: 'asc' | 'desc' = 'asc';
+  order: "asc" | "desc" = "asc";
 
   results: Book[] = [];
 
@@ -24,8 +24,13 @@ export class ViewPageComponent implements OnInit {
     this.results = await this.fetch();
   }
 
+  async deleteBook(id: string) {
+    await this.booksService.delete(id);
+    this.results = await this.fetch();
+  }
+
   async onToggle() {
-    this.order = this.order === 'asc' ? 'desc' : 'asc';
+    this.order = this.order === "asc" ? "desc" : "asc";
     this.results = await this.fetch();
   }
 
