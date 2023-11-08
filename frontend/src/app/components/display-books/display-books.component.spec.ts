@@ -3,24 +3,35 @@ import { TestHelper } from "src/app/tests/test-helper";
 
 import { DisplayBooksComponent } from "./display-books.component";
 
+// Nom de la suite, normallement le nom du composant ou service à tester.
+// Il est possible d'imbriquer des describe pour organiser les tests de façon hiérarchique.
 describe("DisplayBooksComponent", () => {
   let component: DisplayBooksComponent;
   let fixture: ComponentFixture<DisplayBooksComponent>;
   let testHelper: TestHelper<DisplayBooksComponent>;
 
+  /**
+   * beforeEach est exécuté avant chaque test (it).
+   */
   beforeEach(async () => {
+    // On déclare les composants et les modules nécessaires à l'exécution du test.
+    // Ne pas oublier qu'on exécute le test en isolation, donc on doit mettre toutes les dépendances du composant.
     await TestBed.configureTestingModule({
       declarations: [DisplayBooksComponent],
     }).compileComponents();
 
+    // La fixture est un objet utilitaire pour nous aider à tester le composant.
     fixture = TestBed.createComponent(DisplayBooksComponent);
+    // Elle contient une référence au composant.
     component = fixture.componentInstance;
+    // On peut initialiser le TestHelper.
     testHelper = new TestHelper(fixture);
+    // On attend que tout soit stable.
     fixture.detectChanges();
   });
 
+  // 'it' est le nom de la spécification, c'est ce qui sera affiché dans le rapport de test.
   it("should not display books if empty", () => {
-    fixture.detectChanges();
     const title = testHelper.getElement("title");
     expect(title).toBeUndefined();
   });

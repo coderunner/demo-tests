@@ -18,9 +18,6 @@ import com.inf5190.library.books.repository.BooksRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Annotation pour exécuter les tests avec la configuration Spring.
- */
 public class TestBooksController {
     private static final Book TEST_BOOK = new Book("id", "title", "author", "desc", 122);
 
@@ -36,6 +33,8 @@ public class TestBooksController {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+
+        // On crée le controller à tester en lui passant un mock pour le repo
         this.controller = new BooksController(mockRepository);
     }
 
@@ -56,6 +55,8 @@ public class TestBooksController {
 
         // On valide le résultat.
         assertThat(actualBooks).isEqualTo(expectedBooks);
+
+        // Optionel: on valide que le mock a été appelé avec les bons paramètres.
         verify(this.mockRepository, times(1)).getBooks(20, Order.asc);
     }
 
