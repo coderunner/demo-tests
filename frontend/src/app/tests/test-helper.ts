@@ -1,5 +1,5 @@
-import { ComponentFixture } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { ComponentFixture } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
 
 /**
  * Classe de test qui aide à aller chercher des éléments HTML de la page.
@@ -34,6 +34,6 @@ export class TestHelper<T> {
 
   writeInInput(input: any, text: string) {
     input.value = text;
-    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new Event("input"));
   }
 }

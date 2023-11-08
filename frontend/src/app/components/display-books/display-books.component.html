@@ -4,6 +4,7 @@
     <p>Auteur: {{ b.author }}</p>
     <p>Description: {{ b.description }}</p>
     <p>Nombre de pages : {{ b.nbPages }}</p>
+    <button (click)="delete(b.id)">Supprimer</button>
     <div *ngIf="!last"><hr /></div>
   </div>
 </div>

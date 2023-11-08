@@ -14,6 +14,12 @@ Pour rouler le frontend
 ng serve
 ```
 
+## Démo tests Angular
+
+1. Composant de présentation - DisplayBooksComponent
+2. Composant intelligent - ViewPageComponent
+3. Service - BookService
+
 # Backend
 
 Vous devez installer le firebase cli.
@@ -108,7 +114,7 @@ ng run tests:cypress-open
 
 ```
 
-#Docker
+# Docker
 
 Il faut istaller Docker: https://docs.docker.com/get-docker/
 

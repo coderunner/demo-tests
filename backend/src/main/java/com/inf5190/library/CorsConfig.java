@@ -20,7 +20,7 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 allowedOrigins.split(","))
-                        .allowedMethods("GET", "POST");
+                        .allowedMethods("GET", "POST", "DELETE");
             }
         };
     }
