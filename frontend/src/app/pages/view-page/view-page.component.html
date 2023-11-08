@@ -1,6 +1,6 @@
 <h2>Livres</h2>
 
-<p>Voir {{this.limit}} livres</p>
+<p>Voir {{ this.limit }} livres</p>
 <button type="submit" data-testid="more-button" (click)="onMore()">
   Voir Plus
 </button>
@@ -10,4 +10,7 @@
 
 <hr />
 
-<app-display-books [books]="this.results"></app-display-books>
+<app-display-books
+  [books]="this.results"
+  (deleteBook)="deleteBook($event)"
+></app-display-books>
