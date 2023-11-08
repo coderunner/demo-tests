@@ -11,6 +11,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
 import com.google.cloud.firestore.Query.Direction;
 import com.inf5190.library.books.Order;
 import com.inf5190.library.books.model.Book;
@@ -37,7 +38,7 @@ public class BooksRepository {
             FirestoreBook book = d.toObject(FirestoreBook.class);
             return new Book(d.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getNbPages());
         }).toList();
-        cacheResults(books);
+        // cacheResults(books);
 
         return books;
     }
@@ -48,6 +49,11 @@ public class BooksRepository {
 
         DocumentReference doc = future.get();
         return new Book(doc.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getNbPages());
+    }
+
+    public void deleteBook(String id) throws InterruptedException, ExecutionException {
+        ApiFuture<WriteResult> future = this.firestore.collection("books").document(id).delete();
+        future.get();
     }
 
     private void cacheResults(List<Book> books) {
