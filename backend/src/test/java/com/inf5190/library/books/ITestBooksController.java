@@ -11,9 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -59,6 +64,8 @@ public class ITestBooksController {
     @Autowired
     private Firestore firestore;
 
+    private String baseMessageUrl;
+
     /**
      * Méthode appelée avant chaque test.
      * 
@@ -66,6 +73,8 @@ public class ITestBooksController {
      */
     @BeforeEach
     public void setup() throws InterruptedException, ExecutionException {
+        this.baseMessageUrl = String.format("http://localhost:%d/books", port);
+
         ApiFuture<WriteResult> future1 = this.firestore.collection("books").document()
                 .create(new FirestoreBook("test1", "test1", "test1", 111));
         future1.get();
@@ -87,8 +96,13 @@ public class ITestBooksController {
     }
 
     @Test
-    public void getBooks() {
-        final Book[] books = restTemplate.getForObject("http://localhost:" + port + "/books", Book[].class);
+    public void getAllBooks() {
+        final String url = UriComponentsBuilder.fromHttpUrl(this.baseMessageUrl)
+                .build()
+                .toUriString();
+
+        // getForObject pour recevoir directement un objet
+        final Book[] books = restTemplate.getForObject(url, Book[].class);
         assertThat(books.length).isEqualTo(2);
         assertThat(books[0].getTitle()).isEqualTo("test1");
         assertThat(books[1].getTitle()).isEqualTo("test2");
@@ -96,7 +110,19 @@ public class ITestBooksController {
 
     @Test
     public void getBooksAsc() {
-        final Book[] books = restTemplate.getForObject("http://localhost:" + port + "/books?order=asc", Book[].class);
+        final String url = UriComponentsBuilder.fromHttpUrl(this.baseMessageUrl)
+                .queryParam("order", "asc")
+                .build()
+                .toUriString();
+
+        // getForEntity pour recevoir la réponse et valider le code de retour ou prendre
+        // de l'information des headers
+        final ResponseEntity<Book[]> response = restTemplate.getForEntity(url, Book[].class);
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        // exemple pour les headers
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+
+        Book[] books = response.getBody();
         assertThat(books.length).isEqualTo(2);
         assertThat(books[0].getTitle()).isEqualTo("test1");
         assertThat(books[1].getTitle()).isEqualTo("test2");
@@ -104,7 +130,20 @@ public class ITestBooksController {
 
     @Test
     public void getBooksDesc() {
-        final Book[] books = restTemplate.getForObject("http://localhost:" + port + "/books?order=desc", Book[].class);
+        final String url = UriComponentsBuilder.fromHttpUrl(this.baseMessageUrl)
+                .queryParam("order", "desc")
+                .build()
+                .toUriString();
+
+        final RequestEntity<Void> request = RequestEntity.get(url)
+                // .header("sid", "sessionId") <- exemple de header
+                .build();
+
+        // exchange est l'option la plus flexible et permer de passer des headers
+        final ResponseEntity<Book[]> response = restTemplate.exchange(request, Book[].class);
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+
+        Book[] books = response.getBody();
         assertThat(books.length).isEqualTo(2);
         assertThat(books[0].getTitle()).isEqualTo("test2");
         assertThat(books[1].getTitle()).isEqualTo("test1");
@@ -112,19 +151,42 @@ public class ITestBooksController {
 
     @Test
     public void getBooksWithLimit() {
-        final Book[] books = restTemplate.getForObject("http://localhost:" + port + "/books?limit=1", Book[].class);
+        final String url = UriComponentsBuilder.fromHttpUrl(this.baseMessageUrl)
+                .queryParam("limit", "1")
+                .build()
+                .toUriString();
+        final Book[] books = restTemplate.getForObject(url, Book[].class);
         assertThat(books.length).isEqualTo(1);
     }
 
     @Test
     public void addBook() {
-        restTemplate.postForObject("http://localhost:" + port + "/books", TEST_BOOK, Book.class);
+        restTemplate.postForObject(this.baseMessageUrl, TEST_BOOK, Book.class);
 
-        final Book[] books = restTemplate.getForObject("http://localhost:" + port + "/books", Book[].class);
+        final Book[] books = this.getBooks();
         final List<Book> bookList = Arrays.asList(books);
 
         assertThat(books.length).isEqualTo(3);
         assertThat(bookList.stream().filter(b -> b.getTitle().equals(TEST_BOOK.getTitle())).toList().size())
                 .isEqualTo(1);
+    }
+
+    @Test
+    public void deleteBook() {
+        Book[] books = this.getBooks();
+        assertThat(books.length).isEqualTo(2);
+
+        final String toDeleteId = books[0].getId();
+        restTemplate.delete(this.baseMessageUrl + "/{id}", toDeleteId);
+
+        books = this.getBooks();
+        final List<Book> bookList = Arrays.asList(books);
+
+        assertThat(books.length).isEqualTo(1);
+        assertThat(bookList.stream().anyMatch(b -> b.getId() == toDeleteId)).isFalse();
+    }
+
+    private Book[] getBooks() {
+        return restTemplate.getForObject(this.baseMessageUrl, Book[].class);
     }
 }
