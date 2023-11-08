@@ -28,6 +28,7 @@ describe("BookService", () => {
     };
 
     // On exécute la requête au service
+    // Le code du service fera un appel sur le client HTTP de test.
     const getPromise = service.get(1, "asc");
 
     // On valide que l'appel HTTP est fait correctement
@@ -37,7 +38,7 @@ describe("BookService", () => {
     expect(req.request.method).toEqual("GET");
     expect(req.request.params.get("limit")).toEqual("1");
 
-    // On envoie la réponse.
+    // On envoie la réponse au service.
     req.flush([book]);
 
     const response = await getPromise;

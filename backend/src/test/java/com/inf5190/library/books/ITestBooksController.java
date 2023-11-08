@@ -40,7 +40,6 @@ public class ITestBooksController {
      * Il nous injecte aussi un client http (TestRestTemplate) et un pointeur vers
      * Firestore.
      */
-
     @Value("${firebase.project.id}")
     private String firebaseProjectId;
 
@@ -50,6 +49,10 @@ public class ITestBooksController {
     @LocalServerPort
     private int port;
 
+    /**
+     * '@Autowired' indique à Spring d'assigner les Beans ici après la création du
+     * l'objet de test.
+     */
     @Autowired
     private TestRestTemplate restTemplate;
 

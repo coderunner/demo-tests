@@ -16,9 +16,13 @@ ng serve
 
 ## Démo tests Angular
 
-1. Composant de présentation - DisplayBooksComponent
-2. Composant intelligent - ViewPageComponent
+1. Composant intelligent - ViewPageComponent
+2. Composant de présentation - DisplayBooksComponent
 3. Service - BookService
+4. Couverture - ng test --no-watch --code-coverage
+
+Bien comprendre describe, it, la définition du test, les mock, les spy, le client HTTP de test.
+Option de rouler une seule suite (fdescribe) ou seulement certains tests (fit).
 
 # Backend
 
@@ -67,7 +71,7 @@ firebase emulators:start
 Vous devez configurer Visual Studio Code (chercher java.test.config dans les settings) pour qu'il ajoute dans les variables d'environnement:
 
 ```
-FIRESTORE_EMULATOR_HOST = localhost:8181
+FIRESTORE_EMULATOR_HOST=localhost:8181
 ```
 
 Celà devrait ressembler au json suivant dans votre settings.json.
@@ -84,6 +88,18 @@ Celà devrait ressembler au json suivant dans votre settings.json.
 }
 
 ```
+
+## Démo tests Spring Boot
+
+0. Mise en place
+
+- Terminal 1:
+  firebase emulators:start
+- Terminal 2:
+  export FIRESTORE_EMULATOR_HOST=localhost:8181
+  ./mvnw clean spring-boot:run
+
+1. Unit test
 
 # Cypress
 
