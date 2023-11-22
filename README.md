@@ -91,15 +91,10 @@ Celà devrait ressembler au json suivant dans votre settings.json.
 
 ## Démo tests Spring Boot
 
-0. Mise en place
+firebase emulators:exec "./mvnw integration-test"
 
-- Terminal 1:
-  firebase emulators:start
-- Terminal 2:
-  export FIRESTORE_EMULATOR_HOST=localhost:8181
-  ./mvnw clean spring-boot:run
-
-1. Unit test
+1. Unit tests
+2. Integration tests
 
 # Cypress
 
@@ -132,6 +127,14 @@ ng run tests:cypress-open
 
 # Visual VM and wrk
 
+0. Mise en place
+
+- Terminal 1:
+  firebase emulators:start
+- Terminal 2:
+  export FIRESTORE_EMULATOR_HOST=localhost:8181
+  ./mvnw clean spring-boot:run
+
 1. Démarrer Visual VM
 2. Démarrer l'émulateur firestore
    firebase emulators:start
@@ -160,15 +163,19 @@ Ex: wrk -t12 -c400 -d30s http://127.0.0.1:8080/books?limit=20
 
 # Docker
 
-Il faut istaller Docker: https://docs.docker.com/get-docker/
+Il faut installer Docker: https://docs.docker.com/get-docker/
 
-Construire le projet pour obtenir un jar.
+Construire le projet pour obtenir un jar avec:
 
 ```
 ./mvnw package
 ```
 
-Construire l'image avec le tag inf5190/tests
+S'assurer que Docker roule.
+
+Voir le Dockerfile.
+
+Construire l'image _inf5190/app-books_ avec le tag _latest_.
 
 ```
 docker build -t inf5190/app-books:latest .
@@ -182,10 +189,23 @@ docker ps
 docker stop ID
 docker start ID
 docker container ls -a
-
 ```
 
 # Déploiement
+
+## Spring Boot
+
+Avec le jib plugin:
+
+```
+./mvnw compile jib:build
+```
+
+Voir le Artifact Registry.
+
+Voir Cloud Run (variable d'environnement)
+
+Voir les Journaux
 
 ## Angular
 
@@ -198,15 +218,3 @@ ng build
 ```
 firebase deploy --only hosting
 ```
-
-## Spring Boot
-
-Avec le jib plugin:
-
-```
-./mvnw compile jib:build
-```
-
-Voir le Artifact Registry.
-Voir Cloud Run (variable d'environnement)
-Voir Logging

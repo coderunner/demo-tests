@@ -21,6 +21,7 @@ describe("AddPageComponent", () => {
     await TestBed.configureTestingModule({
       declarations: [AddPageComponent],
       imports: [ReactiveFormsModule],
+
       // ici on passe un mock au lieu du vrai service, car on ne veut pas déclancher d'appel HTTP.
       providers: [{ provide: BookService, useValue: booksServiceMock }],
     }).compileComponents();
@@ -31,7 +32,7 @@ describe("AddPageComponent", () => {
     fixture.detectChanges();
   });
 
-  // Dans le cas de la page, on
+  // Dans le cas de la page, configure le mock pour intercepter les appels au service.
   it("should call the BookService to add a new book", () => {
     // Spy sur la méthode add du service.
     const addSpy = spyOn(booksServiceMock, "add");

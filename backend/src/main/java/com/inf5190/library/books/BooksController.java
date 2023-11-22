@@ -25,7 +25,7 @@ public class BooksController {
         this.booksRepository = booksRepository;
     }
 
-    @Timed("com.inf5190.library.books.BooksController.get")
+    @Timed(value = "com.inf5190.library.books.BooksController.get", percentiles = { 0.5, 0.95, 0.99 })
     @GetMapping("/books")
     public List<Book> get(
             @RequestParam(name = "limit", defaultValue = "20") Integer limit,
@@ -34,13 +34,13 @@ public class BooksController {
         return this.booksRepository.getBooks(limit, order);
     }
 
-    @Timed("com.inf5190.library.books.BooksController.add")
+    @Timed(value = "com.inf5190.library.books.BooksController.add", percentiles = { 0.5, 0.95, 0.99 })
     @PostMapping("/books")
     public Book add(@RequestBody Book book) throws InterruptedException, ExecutionException {
         return this.booksRepository.addBook(book);
     }
 
-    @Timed("com.inf5190.library.books.BooksController.delete")
+    @Timed(value = "com.inf5190.library.books.BooksController.delete", percentiles = { 0.5, 0.95, 0.99 })
     @DeleteMapping("/books/{id}")
     public void delete(@PathVariable(name = "id") String id) throws InterruptedException, ExecutionException {
         this.booksRepository.deleteBook(id);

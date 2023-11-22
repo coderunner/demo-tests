@@ -26,7 +26,7 @@ public class BooksRepository {
     }
 
     // Ajout du mot clé synchronized pour illustrer la contention
-    synchronized public List<Book> getBooks(Integer requestedLimit, Order order)
+    public List<Book> getBooks(Integer requestedLimit, Order order)
             throws InterruptedException, ExecutionException {
 
         final Query query = this.firestore.collection("books");
